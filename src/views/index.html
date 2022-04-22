@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--=============== FAVICON ===============-->
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+
+    <!--=============== BOXICONS ===============-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="css/swiper-bundle.min.css">
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <title>SHOES</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-animate.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+    <script src="https://npmcdn.com/js-alert/dist/jsalert.min.js"></script>
+</head>
+
+<body ng-app="myapp" ng-controller="mycontroller">
+    <!--==================== HEADER ====================-->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <a href="#" class="nav__logo">
+                <i class='bx bx-store-alt'></i> InStyle
+            </a>
+
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="#home" class="nav__link active-link">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#featured" class="nav__link">Featured</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#products" class="nav__link">Products</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#new" class="nav__link">New</a>
+                    </li>
+                    <li class="nav__item" ng-show="ok">
+                        <a href="#register" class="nav__link ">Register/Login</a>
+                    </li>
+                </ul>
+
+                <div class="nav__close" id="nav-close">
+                    <i class='bx bx-x'></i>
+                </div>
+            </div>
+
+            <div class="nav__btns">
+                <!-- Theme change button -->
+                <i class='bx bx-moon change-theme' id="theme-button"></i>
+
+                <div class="nav__shop" id="cart-shop">
+                    <i class='bx bx-shopping-bag'></i>
+                </div>
+
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class='bx bx-grid-alt'></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!--==================== CART ====================-->
+    <div class="cart" id="cart">
+        <h2 class="cart__title-center">My Cart</h2>
+        <div class="cart__scroll">
+            <i class='bx bx-x cart__close' id="cart-close"></i>
+            <li class="cart__list" ng-repeat="shoe in cart | orderBy:'category'">
+                <img class="cart__img" ng-src="{{shoe.href}}" />
+                <span>{{  shoe.qty + ' x ' + shoe.shoe_name + ' = ' + 'Rs.' + (getCost(shoe))  }}</span>
+                <button class="remove__button" class="btn-danger btn-xs" ng-click="removeItem(shoe);">Remove
+                    Item</button>
+                </br>
+                </br>
+            </li>
+            </ul>
+        </div>
+
+        <h2>Total: Rs. {{ getTotal()}}</h2>
+        <br>
+        <button class="clear__button" ng-click="clearCart();">Clear Cart</button>
+        <br><br>
+        <a class="checkout__button" ng-model="ok" ng-click="activate()" href="#register">Checkout</a>
+    </div>
+
+    <!--==================== MAIN ====================-->
+    <main class="main">
+        <!--==================== HOME ====================-->
+        <section class="home" id="home">
+            <div class="home__container container grid">
+                <div class="home__img-bg">
+                    <img src="img/9.png" alt="" class="home__img">
+                </div>
+
+                <div class="home__social">
+                    <a href="https://www.facebook.com/" target="_blank" class="home__social-link">
+                        Facebook
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" class="home__social-link">
+                        Twitter
+                    </a>
+                    <a href="https://www.instagram.com/" target="_blank" class="home__social-link">
+                        Instagram
+                    </a>
+                </div>
+
+                <div class="home__data">
+                    <h1 class="home__title">NEW SHOE <br> COLLECTIONS<br> AIR MAX</h1>
+                    <p class="home__description">
+                        Latest arrival of the new imported shoe of the Air Max series,
+                        with a modern and resistant design.
+                    </p>
+                    <span class="home__price">Rs. 12455</span>
+
+                    <div class="home__btns">
+
+                        <!--<button class="button home__button">ADD TO CART</button>-->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--==================== FEATURED ====================-->
+        <section class="featured section container" id="featured">
+            <h2 class="section__title">
+                Featured
+            </h2>
+
+            <div class="featured__container grid">
+                <article class="featured__card" ng-repeat="shoe in featured | filter:searchText | orderBy:'category' ">
+                    <span class="featured__tag">Sale</span>
+
+                    <div class="featured__data">
+                        <img class="new__img" ng-src="{{shoe.href}}" />
+                        <h3 class="featured__title">{{shoe.shoe_name}}</h3>
+                        <span class="featured__price">Rs. {{shoe.price}}</span>
+                    </div>
+
+                    <button class="button featured__button" ng-click="addItem(shoe);">ADD TO CART</button>
+                </article>
+
+            </div>
+        </section>
+
+        <!--==================== STORY ====================-->
+        <section class="story section container">
+            <div class="story__container grid">
+                <div class="story__data">
+                    <h2 class="section__title story__section-title">
+                        Our Story
+                    </h2>
+
+                    <h1 class="story__title">
+                        Inspirational Shoe of <br> this year
+                    </h1>
+
+                    <p class="story__description">
+                        The latest and modern shoes of this year, is available in various
+                        presentations in this store, discover them now.
+                    </p>
+
+
+                </div>
+
+                <div class="story__images">
+                    <img src="img/story.png" alt="" class="story__img">
+                    <div class="story__square"></div>
+                </div>
+            </div>
+        </section>
+
+        <!--==================== PRODUCTS ====================-->
+        <section class="products section container" id="products">
+            <h2 class="section__title">
+                Products
+            </h2>
+
+            <div class="products__container grid">
+                <article class="products__card" ng-repeat="shoe in products | filter:searchText | orderBy:'category' ">
+                    <img class="new__img" ng-src="{{shoe.href}}" />
+                    <h3 class="products__title">{{shoe.shoe_name}}</h3>
+                    <span class="products__price">Rs. {{shoe.price}}</span>
+
+                    <button class="button products__button" ng-click="addItem(shoe);">ADD TO CART</button>
+                </article>
+
+            </div>
+        </section>
+
+        <!--==================== TESTIMONIAL ====================-->
+        <section class="testimonial section container">
+            <div class="testimonial__container grid">
+                <div class="swiper testimonial-swiper">
+                    <div class="swiper-wrapper">
+                        <div class="testimonial__card swiper-slide">
+                            <div class="testimonial__quote">
+                                <i class='bx bxs-quote-alt-left'></i>
+                            </div>
+                            <p class="testimonial__description">
+                                They are the best shoes that one acquires, also they are always with the latest
+                                news and trends, with very attractive pricing and especially with the attention
+                                you receive, they are always attentive to your questions.
+                            </p>
+                            <h3 class="testimonial__date">March 27. 2021</h3>
+
+                            <div class="testimonial__perfil">
+                                <img src="img/testimonial1.png" alt="" class="testimonial__perfil-img">
+
+                                <div class="testimonial__perfil-data">
+                                    <span class="testimonial__perfil-name">Viaan Vora</span>
+                                    <span class="testimonial__perfil-detail">Director of a company</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="testimonial__card swiper-slide">
+                            <div class="testimonial__quote">
+                                <i class='bx bxs-quote-alt-left'></i>
+                            </div>
+                            <p class="testimonial__description">
+                                InStyle revolutionized sneaker retail as the original consignment store for rare shoes.
+                                Carrying the rarest exclusives and collectible sneakers, InStyle has evolved from a
+                                one-stop sneaker destination,
+                                to a cultural hub for sneaker enthusiasts and novices alike.
+                            </p>
+                            <h3 class="testimonial__date">March 27. 2021</h3>
+
+                            <div class="testimonial__perfil">
+                                <img src="img/testimonial2.jpg" alt="" class="testimonial__perfil-img">
+
+                                <div class="testimonial__perfil-data">
+                                    <span class="testimonial__perfil-name">Harsh Wawa</span>
+                                    <span class="testimonial__perfil-detail">Director of a company</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="testimonial__card swiper-slide">
+                            <div class="testimonial__quote">
+                                <i class='bx bxs-quote-alt-left'></i>
+                            </div>
+                            <p class="testimonial__description">
+                                InStyle carries a heavily curated selection of all kinds of sneakers ranging from classic
+                                and heritage models
+                                to their modern tech-infused counterparts, and limited edition or hard to find
+                                collaborations across brands.
+                            </p>
+                            <h3 class="testimonial__date">March 27. 2021</h3>
+
+                            <div class="testimonial__perfil">
+                                <img src="img/testimonial3.jpg" alt="" class="testimonial__perfil-img">
+
+                                <div class="testimonial__perfil-data">
+                                    <span class="testimonial__perfil-name">Hardik Thakur</span>
+                                    <span class="testimonial__perfil-detail">Director of a company</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-button-next">
+                        <i class='bx bx-right-arrow-alt'></i>
+                    </div>
+                    <div class="swiper-button-prev">
+                        <i class='bx bx-left-arrow-alt'></i>
+                    </div>
+                </div>
+
+                <div class="testimonial__images">
+                    <div class="testimonial__square"></div>
+                    <img src="img/testimonial.png" alt="" class="testimonial__img">
+                </div>
+            </div>
+        </section>
+
+        <!--==================== NEW ====================-->
+        <section class="new section container" id="new">
+            <h2 class="section__title">
+                New Arrivals
+            </h2>
+
+            <div class="new__container">
+                <div class="swiper new-swiper">
+                    <div class="swiper-wrapper">
+                        <article class="new__card swiper-slide"
+                            ng-repeat="shoe in inventory | filter:searchText | orderBy:'category' "">
+                            <span class=" new__tag">New</span>
+
+
+
+                            <div class="new__data">
+                                <img class="new__img" ng-src="{{shoe.href}}" />
+                                <h3 class="new__title">{{shoe.shoe_name}}</h3>
+                                <span class="new__price">Rs. {{shoe.price}}</span>
+                            </div>
+
+                            <button class="button new__button" ng-click="addItem(shoe);">ADD TO CART</button>
+                        </article>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--==================== REGISTER/LOGIN ====================-->
+        <section class="register section container" id="register" ng-show="ok" >
+
+            <div >
+
+                <div class="register__container">
+                    <div class="message signup">
+                        <div class="btn-wrapper">
+                            <button class="register__button" id="signup">Sign Up</button>
+                            <br><br>
+                            <button class="register__button" id="login"> Login</button>
+                        </div>
+                    </div>
+
+                    <div class="form form--signup" >
+                        <div class="register__title">Welcome! Sign Up</div>
+                        <form autocomplete="off" name="register" method="POST" action="registerr" >
+
+                            <input type="text" name="firstName" placeholder="Name" ng-minlength="3" ng-maxlength="20"
+                                ng-model="user.firstName" ng-required="true" />
+                            <span class="green" ng-if="register.firstName.$error.required">First name is
+                                required.</span>
+                            <span class="red" ng-show="register.firstName.$error.minlength">Minimum 3 characters</span>
+                            <span class="red" ng-show="register.firstName.$error.maxlength">Maximum 20 characters</span>
+
+                            <input type="text" name="email" placeholder="Email" ng-model="user.email" required
+                                ng-pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/">
+                            <span class="red" ng-show="register.email.$error.pattern">Please enter valid email
+                                id.</span>
+                            <span class="green" ng-show="register.email.$error.required">Email is required.</span>
+
+                            <input type="number" name="ph" placeholder="Phone Number" ng-model="user.ph" required
+                                ng-maxlength="10" ng-minlength="10">
+                            <span class="red" ng-if="register.ph.$error.minlength">Minimum 10 Digits</span>
+                            <span class="green" ng-if="register.ph.$error.required">Phone Number is required.</span>
+                            
+                            <input type="password" name="pwd" placeholder="Password" ng-model="user.pwd" required
+                                placeholder="Password" ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"/>
+                            <span class="red" ng-show="register.pwd.$error.pattern">Wrong Pattern</span>
+                            <span class="green" ng-if="register.pwd.$error.required">Please fill Field</span>
+                            
+                            <input type="text" name="add" placeholder="Address" ng-minlength="3" ng-maxlength="100"
+                                ng-model="user.add" ng-required="true" />
+                            <span class="green" ng-show="register.add.$error.required">Address is required.</span>
+
+                            <button class="register__button" type="submit" >Sign Up</button>
+                        </form>
+                    </div>
+
+                    <div class="form form--login">
+                        <div class="register__title">Welcome back! </div>
+                        <form autocomplete="off" name="login" method="POST" action="loginn" >
+
+                            <input type="text" name="login_name" placeholder="Name" ng-minlength="3" ng-maxlength="20"
+                                ng-model="user.login_name" ng-required="true" />
+                            <span class="green" ng-if="login.login_name.$error.required">First name is
+                                required.</span>
+                            <span class="red" ng-show="login.login_name.$error.minlength">Minimum 3 characters</span>
+                            <span class="red" ng-show="login.login_name.$error.maxlength">Maximum 20 characters</span>
+
+                            <input type="password" name="login_pass" placeholder="Password" ng-model="user.pwd" required
+                                placeholder="Password" ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"/>
+                            <span class="red" ng-show="login.login_pass.$error.pattern">Wrong Pattern</span>
+                            <span class="green" ng-if="login.login_pass.$error.required">Please fill Field</span>
+
+                            
+                            <button class="register__button">Login</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+            </div>
+        </section>
+    </main>
+
+    <!--==================== FOOTER ====================-->
+    <footer class="footer section">
+        <div class="footer__container container grid">
+            <div class="footer__content">
+                <h3 class="footer__title">Our information</h3>
+
+                <ul class="footer__list">
+                    <li>InStyle</li>
+                    <li>Vile Parle(W), Mumbai</li>
+                    <li>123456789</li>
+                </ul>
+            </div>
+            <div class="footer__content">
+                <h3 class="footer__title">Navigate</h3>
+
+                <ul class="footer__links">
+                    <li>
+                        <a href="#home" class="footer__link">Home</a>
+                    </li>
+                    <li>
+                        <a href="#featured" class="footer__link">Featured</a>
+                    </li>
+                    <li>
+                        <a href="#products" class="footer__link">Products</a>
+                    </li>
+                    <li>
+                        <a href="#new" class="footer__link">New</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer__content">
+                <h3 class="footer__title">Product</h3>
+
+                <ul class="footer__links">
+                    <li>
+                        <a href="https://www.nike.com/in/" class="footer__link">Nike</a>
+                    </li>
+                    <li>
+                        <a href="https://www.adidas.co.in/" class="footer__link">Adidas</a>
+                    </li>
+                    <li>
+                        <a href="https://in.puma.com/" class="footer__link">Puma</a>
+                    </li>
+                    <li>
+                        <a href="https://www.asics.com/in/en-in" class="footer__link">Asics</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer__content">
+                <h3 class="footer__title">Social</h3>
+
+                <ul class="footer__social">
+                    <a href="https://www.facebook.com/" target="_blank" class="footer__social-link">
+                        <i class='bx bxl-facebook'></i>
+                    </a>
+
+                    <a href="https://twitter.com/" target="_blank" class="footer__social-link">
+                        <i class='bx bxl-twitter'></i>
+                    </a>
+
+                    <a href="https://www.instagram.com/" target="_blank" class="footer__social-link">
+                        <i class='bx bxl-instagram'></i>
+                    </a>
+                </ul>
+            </div>
+        </div>
+
+
+    </footer>
+
+    <!--=============== SCROLL UP ===============-->
+    <a href="#" class="scrollup" id="scroll-up">
+        <i class='bx bx-up-arrow-alt scrollup__icon'></i>
+    </a>
+
+    <!--=============== SWIPER JS ===============-->
+    <script src="js/swiper-bundle.min.js"></script>
+
+    <!--=============== MAIN JS ===============-->
+    <script src="js/main.js"></script>
+
+    <!--=============== CART JS ===============-->
+    <script src="js/cart.js"></script>
+
+
+</body>
+</html>
